@@ -51,8 +51,8 @@ tokenProperties parse_digit(char* tokenString, int x){
         if (x == start && tokenString[x] != '0'){
             possibleHex = 0;
             possibleOctal = 0;
-        //If the second char is not X or x, eliminate hex
-        }else if(x == start + 1 && toupper(tokenString[x]) != 'X'){
+        //If the second char is not X or x, or if the string is just "0x/X" eliminate hex
+        }else if(x == start + 1 && (toupper(tokenString[x]) != 'X') || !isxdigit(tokenString[x+1])){
             possibleHex = 0;
         }
         //If the char breaks the token, leave the while loop to end token
