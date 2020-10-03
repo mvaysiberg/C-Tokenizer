@@ -17,6 +17,10 @@ char* isKeyword(char* str);
 void print_token(char* tokenName, char* start, char* end);
 
 int main(int argc, char ** argv){
+    //Check if an input string is given
+    if (argc == 1){
+        printf("No arguments\n");
+    }
     tokenProperties tp;
     int commenting = 0;
     int y = 0;
