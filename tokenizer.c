@@ -394,7 +394,7 @@ tokenProperties parse_word(char* tokenString, int x){
     token[len] = '\0';
     tokenProperties ret = {x, "word"};
     //if the token is sizeof, the token type is sizeof
-    if (strcmp(token,"sizeof")){
+    if (strcmp(token,"sizeof") == 0){
         ret.tokenName = "sizeof";
     }
     //if the token is a keyword then we return keyword as its type
@@ -507,8 +507,6 @@ int isKeyword(char* str){
     }else if(strcmp(str, "short") == 0){
         return 1;
     }else if(strcmp(str, "signed") == 0){
-        return 1;
-    }else if(strcmp(str, "sizeof") == 0){
         return 1;
     }else if(strcmp(str, "static") == 0){
         return 1;
