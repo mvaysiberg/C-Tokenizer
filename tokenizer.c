@@ -63,13 +63,14 @@ int main(int argc, char ** argv){
                 commenting = 0;
             }
         }
+        //print token
         int tokenLength = tp.endpos-y;
         if (!commenting && tokenLength > 0)
         {
             print_token(tp.tokenName,&argv[1][y], &argv[1][tp.endpos]);
-	    y = tp.endpos;
+	        y = tp.endpos;
         }
-
+        //check for unmatched quote
         else if (tp.endpos == -1)
         {
             printf("Invalid token: %s\n", &argv[1][y]);
@@ -80,8 +81,6 @@ int main(int argc, char ** argv){
             y+=1;
         }
     }
-    printf("\n");
-    
 	return 0;
 }
 tokenProperties parse_quote(char* tokenString, int x){
@@ -434,10 +433,10 @@ tokenProperties parse_digit(char* tokenString, int x){
             possibleDecimal = 0;
         }
         //out of hex range
-        if (possibleHex && !isxdigit(tokenString[x])){
+        if (possibleHex && !isxdigit(tokenString[x]) && x != start+1){
             break;
         }
-	//E must be followed by a digit or a +/-
+	    //E must be followed by a digit or a +/-
         if(toupper(tokenString[x]) == 'E' && !isdigit(tokenString[x+1]) && tokenString[x+1] != '+' && tokenString[x+1] != '-'){
             break;
         }
