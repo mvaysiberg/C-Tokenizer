@@ -27,11 +27,11 @@ int main(int argc, char ** argv){
             y+=1;
             continue;
         }
-        else if(!commenting && isdigit(argv[1], y))
+        else if(!commenting && isdigit(argv[1][y]))
         {
             tp = parse_digit(argv[1], y);
         }
-        else if (!commenting && isalpha(argv[1], y))
+        else if (!commenting && isalpha(argv[1][y]))
         {
             tp = parse_word(argv[1], y);
         }
