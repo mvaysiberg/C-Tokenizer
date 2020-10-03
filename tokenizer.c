@@ -18,6 +18,7 @@ int isKeyword(char* str);
 void print_token(char* tokenName, char* start, char* end);
 
 //Get command-line input and iterate through the string
+//It is assumed that argc = 1 or argc = 2
 int main(int argc, char ** argv){
     //Check if an input string is given
     if (argc == 1){
@@ -91,6 +92,7 @@ int main(int argc, char ** argv){
 	return 0;
 }
 //Used to find closing quote
+//It is assumed that tokenString[x] is either " or ' (which is guaranteed from main) and that tokenString either contains a closing quote or null terminator
 tokenProperties parse_quote(char* tokenString, int x){
     char qtype = tokenString[x];
     x+=1;
@@ -110,6 +112,7 @@ tokenProperties parse_quote(char* tokenString, int x){
     return ret;
 }
 //Determine the operator in the tokenString
+//It is assumed that tokenString[x] exists
 tokenProperties parse_operator(char* tokenString, int x) {
     tokenProperties ret = {x, ""};
     switch(tokenString[x]) {
@@ -384,6 +387,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
     }
 }
 //Determine the word in the tokenString
+//It is assumed that tokenString[x] is a letter (guaranteed by main) and that tokenString either contains a char that is not a letter or a null terminator
 tokenProperties parse_word(char* tokenString, int x){
     int start = x;
     //loops through the tokenString until the current char cannot be part of a word
@@ -407,6 +411,7 @@ tokenProperties parse_word(char* tokenString, int x){
     return ret;
 }
 //Determine the type of number in the tokenString
+//It is assumed that tokenString[x] is a digit (guaranteed by main) and that tokenString either contains a char that is not numeric or a null terminator
 tokenProperties parse_digit(char* tokenString, int x){
     int start = x;
     int possibleFloat = 0;
@@ -482,6 +487,7 @@ tokenProperties parse_digit(char* tokenString, int x){
     return ret;
 }
 //Returns whether the contents of str are a C keyword
+//It is assumed that str is not NULL
 int isKeyword(char* str){
      if (strcmp(str, "auto") == 0){
         return 1;
@@ -550,6 +556,7 @@ int isKeyword(char* str){
     }
 }
 //Prints token
+//It is assumed that end > start are not NULL (guaranteed by main) and tokenName is not NULL and \0 terminated
 void print_token(char* tokenName, char* start, char* end){
     printf("%s: \"", tokenName);
     //prints each character [start,end)
