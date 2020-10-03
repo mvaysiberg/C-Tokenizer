@@ -74,9 +74,12 @@ int main(int argc, char ** argv){
         }
         //print token
         int tokenLength = tp.endpos-y;
-        if (!commenting && tokenLength > 0 && strcmp(tp.tokenName, "endMultiline") != 0)
+        if (!commenting && tokenLength > 0)
         {
-            print_token(tp.tokenName,&argv[1][y], &argv[1][tp.endpos]);
+            if (strcmp(tp.tokenName, "endMultiline") != 0)
+            {
+                print_token(tp.tokenName,&argv[1][y], &argv[1][tp.endpos]);
+            }
 	        y = tp.endpos;
         }
         //check for unmatched quote
