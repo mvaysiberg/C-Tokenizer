@@ -540,10 +540,10 @@ char* isKeyword(char* str){
 }
 
 void print_token(char* tokenName, char* start, char* end){
-    printf("%s: ", tokenName);
+    printf("%s: \"", tokenName);
     //prints each character [start,end)
     for(char * ptr = start; ptr != end; ++ptr){
         printf("%c", *ptr);
     }
-    printf("\n");
+    printf("\"\n");
 }
