@@ -19,6 +19,7 @@ void print_token(char* tokenName, char* start, char* end);
 
 //Get command-line input and iterate through the string
 //It is assumed that argc = 1 or argc = 2
+//Checks the following errors: no input (print No arguments and exit), an unmatched quote (print invalid token), and an endMultiline comment without a startMultiline (print invalid token)
 int main(int argc, char ** argv){
     //Check if an input string is given
     if (argc == 1){
@@ -73,7 +74,7 @@ int main(int argc, char ** argv){
         }
         //print token
         int tokenLength = tp.endpos-y;
-        if (!commenting && tokenLength > 0)
+        if (!commenting && tokenLength > 0 && strcmp(tp.tokenName, "endMultiline") != 0)
         {
             print_token(tp.tokenName,&argv[1][y], &argv[1][tp.endpos]);
 	        y = tp.endpos;
