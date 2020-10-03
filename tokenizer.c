@@ -66,10 +66,7 @@ int main(int argc, char ** argv){
         int tokenLength = tp.endpos-y;
         if (!commenting && tokenLength > 0)
         {
-            char* token = (char*)(malloc(tokenLength+1));
-            strncpy(token, argv[1][y], tokenLength);
-            token[tokenLength] = '\0';
-            printf("%s: \"%s\"\n", tp.tokenName, token);
+            print_token(tp.tokenName,&argv[1][y], &argv[1][tp.endpos]);
         }
 
         else if (tp.endpos == -1)
@@ -412,7 +409,7 @@ tokenProperties parse_digit(char* tokenString, int x){
             possibleHex = 0;
             possibleOctal = 0;
         //If the second char is not X or x, or if the string is just "0x/X" eliminate hex
-        }else if(x == start + 1 && (toupper(tokenString[x]) != 'X') || !isxdigit(tokenString[x+1])){
+        }else if(x == start + 1 && (toupper(tokenString[x]) != 'X' || !isxdigit(tokenString[x+1]))){
             possibleHex = 0;
         }
         //If the char breaks the token, leave the while loop to end token
