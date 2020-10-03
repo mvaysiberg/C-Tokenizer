@@ -4,6 +4,7 @@
 #include<ctype.h>
 #include<unistd.h>
 
+//Get the properties of the token after parsing
 typedef struct _tokenProperties {
     int endpos;
     char* tokenName;
@@ -13,9 +14,10 @@ tokenProperties parse_quote(char* tokenString, int x);
 tokenProperties parse_operator(char* tokenString, int x);
 tokenProperties parse_word(char* tokenString, int x);
 tokenProperties parse_digit(char* tokenString, int x);
-char* isKeyword(char* str);
+int isKeyword(char* str);
 void print_token(char* tokenName, char* start, char* end);
 
+//Get command-line input and iterate through the string
 int main(int argc, char ** argv){
     //Check if an input string is given
     if (argc == 1){
@@ -391,10 +393,13 @@ tokenProperties parse_word(char* tokenString, int x){
     strncpy(token,&(tokenString[start]),len);
     token[len] = '\0';
     tokenProperties ret = {x, "word"};
+    //if the token is sizeof, the token type is sizeof
+    if (strcmp(token,"sizeof")){
+        ret.tokenName = "sizeof";
+    }
     //if the token is a keyword then we return keyword as its type
-    char* tokenKeyword = isKeyword(token);
-    if (tokenKeyword != NULL){
-        ret.tokenName = tokenKeyword;
+    else if (isKeyword(token)){
+        ret.tokenName = "keyword";
     }
     free(token);
     return ret;
@@ -473,74 +478,74 @@ tokenProperties parse_digit(char* tokenString, int x){
     }
     return ret;
 }
-char* isKeyword(char* str){
+int isKeyword(char* str){
     //returns whether the contents of str are a C keyword
      if (strcmp(str, "sizeof") == 0){
-        return "sizeof";
+        return 1;
     }else if(strcmp(str, "break") == 0){
-        return "break";
+        return 1;
     }else if(strcmp(str, "case") == 0){
-        return "case";
+        return 1;
     }else if(strcmp(str, "char") == 0){
-        return "char";
+        return 1;
     }else if(strcmp(str, "const") == 0){
-        return "const";
+        return 1;
     }else if(strcmp(str, "continue") == 0){
-        return "continue";
+        return 1;
     }else if(strcmp(str, "default") == 0){
-        return "default";
+        return 1;
     }else if(strcmp(str, "do") == 0){
-       return "do";
+       return 1;
     }else if(strcmp(str, "int") == 0){
-        return "int";
+        return 1;
     }else if(strcmp(str, "long") == 0){
-        return "long";
+        return 1;
     }else if(strcmp(str, "register") == 0){
-        return "register";
+        return 1;
     }else if(strcmp(str, "return") == 0){
-        return "return";
+        return 1;
     }else if(strcmp(str, "short") == 0){
-        return "short";
+        return 1;
     }else if(strcmp(str, "signed") == 0){
-        return "signed";
+        return 1;
     }else if(strcmp(str, "sizeof") == 0){
-        return "sizeof";
+        return 1;
     }else if(strcmp(str, "static") == 0){
-        return "static";
+        return 1;
     }else if(strcmp(str, "struct") == 0){
-        return "struct";
+        return 1;
     }else if(strcmp(str, "switch") == 0){
-        return "switch";
+        return 1;
     }else if(strcmp(str, "typedef") == 0){
-        return "typedef";
+        return 1;
     }else if(strcmp(str, "union") == 0){
-        return "union";
+        return 1;
     }else if(strcmp(str, "unsigned") == 0){
-        return "unsigned";
+        return 1;
     }else if(strcmp(str, "void") == 0){
-        return "void";
+        return 1;
     }else if(strcmp(str, "volatile") == 0){
-        return "volatile";
+        return 1;
     }else if(strcmp(str, "while") == 0){
-        return "while";
+        return 1;
     }else if(strcmp(str, "double") == 0){
-        return "double";
+        return 1;
     }else if(strcmp(str, "else") == 0){
-        return "else";
+        return 1;
     }else if(strcmp(str, "enum") == 0){
-        return "enum";
+        return 1;
     }else if(strcmp(str, "extern") == 0){
-        return "extern";
+        return 1;
     }else if(strcmp(str, "float") == 0){
-        return "float";
+        return 1;
     }else if(strcmp(str, "for") == 0){
-        return "for";
+        return 1;
     }else if(strcmp(str, "goto") == 0){
-        return "goto";
+        return 1;
     }else if(strcmp(str, "if") == 0){
-        return "if";
+        return 1;
     }else{
-        return NULL;
+        return 0;
     }
 }
 
