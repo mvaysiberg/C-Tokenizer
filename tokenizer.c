@@ -72,7 +72,7 @@ int main(int argc, char ** argv){
 
         else if (tp.endpos == -1)
         {
-            printf("Invalid token: %s\n", argv[1][y]);
+            printf("Invalid token: %s\n", &argv[1][y]);
             exit(0);
         }
         else
