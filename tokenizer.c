@@ -483,7 +483,7 @@ tokenProperties parse_digit(char* tokenString, int x){
 }
 //Returns whether the contents of str are a C keyword
 int isKeyword(char* str){
-     if (strcmp(str, "sizeof") == 0){
+     if (strcmp(str, "auto") == 0){
         return 1;
     }else if(strcmp(str, "break") == 0){
         return 1;
