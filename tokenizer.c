@@ -90,6 +90,7 @@ int main(int argc, char ** argv){
     }
 	return 0;
 }
+//Used to find closing quote
 tokenProperties parse_quote(char* tokenString, int x){
     char qtype = tokenString[x];
     x+=1;
@@ -108,7 +109,7 @@ tokenProperties parse_quote(char* tokenString, int x){
     ret.tokenName = "Invalid Token";
     return ret;
 }
-
+//Determine the operator in the tokenString
 tokenProperties parse_operator(char* tokenString, int x) {
     tokenProperties ret = {x, ""};
     switch(tokenString[x]) {
@@ -382,6 +383,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
             return ret;
     }
 }
+//Determine the word in the tokenString
 tokenProperties parse_word(char* tokenString, int x){
     int start = x;
     //loops through the tokenString until the current char cannot be part of a word
@@ -404,6 +406,7 @@ tokenProperties parse_word(char* tokenString, int x){
     free(token);
     return ret;
 }
+//Determine the type of number in the tokenString
 tokenProperties parse_digit(char* tokenString, int x){
     int start = x;
     int possibleFloat = 0;
@@ -478,8 +481,8 @@ tokenProperties parse_digit(char* tokenString, int x){
     }
     return ret;
 }
+//Returns whether the contents of str are a C keyword
 int isKeyword(char* str){
-    //returns whether the contents of str are a C keyword
      if (strcmp(str, "sizeof") == 0){
         return 1;
     }else if(strcmp(str, "break") == 0){
@@ -546,7 +549,7 @@ int isKeyword(char* str){
         return 0;
     }
 }
-
+//Prints token
 void print_token(char* tokenName, char* start, char* end){
     printf("%s: \"", tokenName);
     //prints each character [start,end)
