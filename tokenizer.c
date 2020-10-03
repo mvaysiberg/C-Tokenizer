@@ -20,6 +20,7 @@ int main(int argc, char ** argv){
     //Check if an input string is given
     if (argc == 1){
         printf("No arguments\n");
+        exit(0);
     }
     tokenProperties tp;
     int commenting = 0;
