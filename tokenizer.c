@@ -414,7 +414,7 @@ tokenProperties parse_digit(char* tokenString, int x){
             possibleHex = 0;
         }
         //If the char breaks the token, leave the while loop to end token
-        if (!(isdigit(tokenString[x]) || (isalpha(tokenString[x]) && possibleHex) || (possibleDecimal && toupper(tokenString[x])=='E') || tokenString[x] == '.' || (x == ePos + 1 && (tokenString[x] == '+' || tokenString[x] == '-')))){
+        if (!(isdigit(tokenString[x]) || (isalpha(tokenString[x]) && possibleHex) || (possibleFloat && toupper(tokenString[x])=='E') || tokenString[x] == '.' || (x == ePos + 1 && (tokenString[x] == '+' || tokenString[x] == '-')))){
             break;
         }
         if(tokenString[x] == '.'){
@@ -437,7 +437,8 @@ tokenProperties parse_digit(char* tokenString, int x){
         if (possibleHex && !isxdigit(tokenString[x])){
             break;
         }
-        if(toupper(tokenString[x]) == 'E' && (!isdigit(tokenString[x+1]) || tokenString[x+1] != '+' || tokenString[x+1] != '-')){
+	//E must be followed by a digit or a +/-
+        if(toupper(tokenString[x]) == 'E' && !isdigit(tokenString[x+1]) && tokenString[x+1] != '+' && tokenString[x+1] != '-'){
             break;
         }
         //if an 'E' is encountered for the first time
