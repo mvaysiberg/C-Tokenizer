@@ -12,7 +12,7 @@ typedef struct _tokenProperties {
 tokenProperties parse_word(char* tokenString, int x);
 tokenProperties parse_digit(char* tokenString, int x);
 char* isKeyword(char* str);
-
+void print_token(char* tokenName, char* start, char* end);
 
 int main(int argc, char ** argv){
 	return 0;
@@ -178,4 +178,13 @@ char* isKeyword(char* str){
     }else{
         return NULL;
     }
+}
+
+void print_token(char* tokenName, char* start, char* end){
+    printf("%s: ", tokenName);
+    //prints each character [start,end)
+    for(char * ptr = start; ptr != end; ++ptr){
+        printf("%c", *ptr);
+    }
+    printf("\n");
 }
