@@ -67,6 +67,7 @@ int main(int argc, char ** argv){
         if (!commenting && tokenLength > 0)
         {
             print_token(tp.tokenName,&argv[1][y], &argv[1][tp.endpos]);
+	    y = tp.endpos;
         }
 
         else if (tp.endpos == -1)
