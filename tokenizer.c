@@ -27,21 +27,21 @@ int main(int argc, char ** argv){
             y+=1;
             continue;
         }
-        else if(!commenting && isdigit(argv[1][y]))
+        else if(!commenting && isdigit(argv[1], y))
         {
-            tp = parse_digit(argv[1][y])
+            tp = parse_digit(argv[1], y);
         }
-        else if (!commenting && isalpha(argv[1][y]))
+        else if (!commenting && isalpha(argv[1], y))
         {
-            tp = parse_word(argv[1][y]);
+            tp = parse_word(argv[1], y);
         }
         else if (!commenting && (argv[1][y] == '\"' || argv[1][y] == '\''))
         {
-            tp = parse_quote(argv[1][y]);
+            tp = parse_quote(argv[1], y);
         }
         else
         {
-            tp = parse_operator(argv[1][y]);
+            tp = parse_operator(argv[1], y);
             //if a single line comment is found, exit
             if (strcmp(tp.tokenName, "comment") == 0)
             {
@@ -79,7 +79,7 @@ int main(int argc, char ** argv){
         }
         else
         {
-            y+=1
+            y+=1;
         }
     }
     printf("\n");
@@ -87,14 +87,14 @@ int main(int argc, char ** argv){
 	return 0;
 }
 tokenProperties parse_quote(char* tokenString, int x){
-    char qtype = argv[1][x];
+    char qtype = tokenString[x];
     x+=1;
     tokenProperties ret;
-    while (argv[1][x]!= '\0')
+    while (tokenString[x]!= '\0')
     {
-        if (argv[1][x] == qtype)
+        if (tokenString[x] == qtype)
         {
-            ret.endpos = x+1
+            ret.endpos = x+1;
             ret.tokenName = "quote";
             return ret;
         }
@@ -107,7 +107,7 @@ tokenProperties parse_quote(char* tokenString, int x){
 
 tokenProperties parse_operator(char* tokenString, int x) {
     tokenProperties ret = {x, ""};
-    switch(argv[1][x]) {
+    switch(tokenString[x]) {
         case '(':
             ret.endpos = x+1;
             ret.tokenName = "left parenthesis";
@@ -145,19 +145,19 @@ tokenProperties parse_operator(char* tokenString, int x) {
             ret.tokenName = "structure member";
             return ret;
         case '-':
-            if (argv[1][x+1] == '>')
+            if (tokenString[x+1] == '>')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "structure pointer";
                 return ret;
             }
-            else if (argv[1][x+1] == '-')
+            else if (tokenString[x+1] == '-')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "decrement";
                 return ret;
             }
-            else if (argv[1][x+1] == '=')
+            else if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "minus equals";
@@ -170,13 +170,13 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '+':
-            if (argv[1][x+1] == '+')
+            if (tokenString[x+1] == '+')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "increment";
                 return ret;
             }
-            else if (argv[1][x+1] == '=')
+            else if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "plus equals";
@@ -189,19 +189,19 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '>':
-            if (argv[1][x+1] == '>' && argv[1][x+2] == '=')
+            if (tokenString[x+1] == '>' && tokenString[x+2] == '=')
             {
                 ret.endpos = x+3;
                 ret.tokenName = "shift right equals";
                 return ret;
             }
-            else if (argv[1][x+1] == '>')
+            else if (tokenString[x+1] == '>')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "shift right";
                 return ret;
             }
-            else if (argv[1][x+1] == '=')
+            else if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "greater than or equal test";
@@ -214,19 +214,19 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '<':
-            if (argv[1][x+1] == '<' && argv[1][x+2] == '=')
+            if (tokenString[x+1] == '<' && tokenString[x+2] == '=')
             {
                 ret.endpos = x+3;
                 ret.tokenName = "shift left equals";
                 return ret;
             }
-            else if (argv[1][x+1] == '<')
+            else if (tokenString[x+1] == '<')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "shift left";
                 return ret;
             }
-            else if (argv[1][x+1] == '=')
+            else if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "less than or equal test";
@@ -239,7 +239,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '!':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "inequality test";
@@ -252,7 +252,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '^':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "bitwise XOR equals";
@@ -265,13 +265,13 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '|':
-            if (argv[1][x+1] == '|')
+            if (tokenString[x+1] == '|')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "logical OR";
                 return ret;
             }
-            else if (argv[1][x+1] == '=')
+            else if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "bitwise OR equals";
@@ -284,19 +284,19 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '/':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "divide equals";
                 return ret;
             }
-            else if (argv[1][x+1] == '/')
+            else if (tokenString[x+1] == '/')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "comment";
                 return ret;
             }
-            else if (argv[1][x+1] == '*')
+            else if (tokenString[x+1] == '*')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "startMultiline";
@@ -309,13 +309,13 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '*':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "times equals";
                 return ret;
             }
-            else if (argv[1][x+1] == '/')
+            else if (tokenString[x+1] == '/')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "endMultiline";
@@ -328,7 +328,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '=':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "equality test";
@@ -341,13 +341,13 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '&':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "bitwise AND equals";
                 return ret;
             }
-            else if (argv[1][x+1] == '&')
+            else if (tokenString[x+1] == '&')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "logical AND";
@@ -360,7 +360,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         case '%':
-            if (argv[1][x+1] == '=')
+            if (tokenString[x+1] == '=')
             {
                 ret.endpos = x+2;
                 ret.tokenName = "mod equals";
@@ -373,7 +373,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
                 return ret;
             }
         default:
-            ret.endpos = y+1;
+            ret.endpos = x+1;
             ret.tokenName = "Invalid Token";
             return ret;
     }
