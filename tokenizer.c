@@ -582,5 +582,5 @@ int compare_str(char* str1, char* str2Start, char* str2End){
         ++str1;
         ++str2Start;
     }
-    return 0;
+    return !(*str1 == '\0' && str2Start == str2End); 
 }
