@@ -405,7 +405,7 @@ tokenProperties parse_word(char* tokenString, int x){
     token[len] = '\0';
     tokenProperties ret = {x, "word"};
     //if the token is sizeof, the token type is sizeof
-    if (compare_str("sizeof",start,x) == 0){
+    if (compare_str("sizeof",&tokenString[start],&tokenString[x]) == 0){
         ret.tokenName = "sizeof";
     }
     //if the token is a keyword then we return keyword as its type
