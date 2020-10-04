@@ -16,7 +16,6 @@ tokenProperties parse_word(char* tokenString, int x);
 tokenProperties parse_digit(char* tokenString, int x);
 int isKeyword(char* strStart, char*strEnd);
 void print_token(char* tokenName, char* start, char* end);
-int compare_str(char* str1, char* str2Start, char* str2End);
 
 //Get command-line input and iterate through the string
 //It is assumed that argc = 1 or argc = 2
