@@ -14,7 +14,7 @@ tokenProperties parse_quote(char* tokenString, int x);
 tokenProperties parse_operator(char* tokenString, int x);
 tokenProperties parse_word(char* tokenString, int x);
 tokenProperties parse_digit(char* tokenString, int x);
-int isKeyword(char* str);
+int isKeyword(char* strStart, char*strEnd);
 void print_token(char* tokenName, char* start, char* end);
 int compare_str(char* str1, char* str2Start, char* str2End);
 
@@ -409,7 +409,7 @@ tokenProperties parse_word(char* tokenString, int x){
         ret.tokenName = "sizeof";
     }
     //if the token is a keyword then we return keyword as its type
-    else if (isKeyword(token)){
+    else if (isKeyword(&tokenString[start],&tokenString[x])){
         ret.tokenName = "keyword";
     }
     free(token);
@@ -493,68 +493,68 @@ tokenProperties parse_digit(char* tokenString, int x){
 }
 //Returns whether the contents of str are a C keyword
 //It is assumed that str is not NULL
-int isKeyword(char* str){
-     if (strcmp(str, "auto") == 0){
+int isKeyword(char* strStart, char* strEnd){
+     if (compare_str("auto", strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "break") == 0){
+    }else if(compare_str("break",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "case") == 0){
+    }else if(compare_str("case",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "char") == 0){
+    }else if(compare_str("char",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "const") == 0){
+    }else if(compare_str("const",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "continue") == 0){
+    }else if(compare_str("continue",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "default") == 0){
+    }else if(compare_str("default",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "do") == 0){
+    }else if(compare_str("do",strStart, strEnd) == 0){
        return 1;
-    }else if(strcmp(str, "int") == 0){
+    }else if(compare_str("int",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "long") == 0){
+    }else if(compare_str("long",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "register") == 0){
+    }else if(compare_str("register",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "return") == 0){
+    }else if(compare_str("return",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "short") == 0){
+    }else if(compare_str("short",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "signed") == 0){
+    }else if(compare_str("signed",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "static") == 0){
+    }else if(compare_str("static",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "struct") == 0){
+    }else if(compare_str("struct",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "switch") == 0){
+    }else if(compare_str("switch",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "typedef") == 0){
+    }else if(compare_str("typedef",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "union") == 0){
+    }else if(compare_str("union",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "unsigned") == 0){
+    }else if(compare_str("unsigned",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "void") == 0){
+    }else if(compare_str("void",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "volatile") == 0){
+    }else if(compare_str("volatile",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "while") == 0){
+    }else if(compare_str("while",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "double") == 0){
+    }else if(compare_str("double",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "else") == 0){
+    }else if(compare_str("else",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "enum") == 0){
+    }else if(compare_str("enum",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "extern") == 0){
+    }else if(compare_str("extern",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "float") == 0){
+    }else if(compare_str("float",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "for") == 0){
+    }else if(compare_str("for",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "goto") == 0){
+    }else if(compare_str("goto",strStart, strEnd) == 0){
         return 1;
-    }else if(strcmp(str, "if") == 0){
+    }else if(compare_str("if",strStart, strEnd) == 0){
         return 1;
     }else{
         return 0;
