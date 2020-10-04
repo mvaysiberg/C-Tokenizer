@@ -83,7 +83,7 @@ int main(int argc, char ** argv){
             {
                 //if an end of a multiline comment is found without the start, go to next character
                 if(commenting != 1) {
-                    tp.tokenName = "Invalid Token";
+                    tp.tokenName = "invalid token";
                 }
                 commenting = 0;
             }
@@ -101,7 +101,7 @@ int main(int argc, char ** argv){
         //check for unmatched quote
         else if (tp.endpos == -1)
         {
-            printf("Invalid token: %s\n", &argv[1][y]);
+            printf("invalid token: %s\n", &argv[1][y]);
             exit(0);
         }
         else
@@ -131,7 +131,7 @@ tokenProperties parse_quote(char* tokenString, int x){
         x+=1;
     }
     ret.endpos = -1;
-    ret.tokenName = "Invalid Token";
+    ret.tokenName = "invalid token";
     return ret;
 }
 //Determine the operator in the tokenString
@@ -407,7 +407,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
             }
         default:
             ret.endpos = x+1;
-            ret.tokenName = "Invalid Token";
+            ret.tokenName = "invalid token";
             return ret;
     }
 }

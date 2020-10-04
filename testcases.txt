@@ -116,18 +116,18 @@ No arguments
 
 Input: "\$"
 Output:
-Invalid Token: "$"
+invalid token: "$"
 
 EXTRA CREDIT
 Input: "abc'abc"
 Output:
 word: "abc"
-Invalid token: 'abc
+invalid token: 'abc
 
 Input: "abc\”abc"
 Output:
 word: "abc"
-Invalid token: "abc
+invalid token: "abc
 
 Input: "ab\"ca\"bc"
 Output:
@@ -167,5 +167,5 @@ word: "ab"
 Input: "abcd*/ef"
 Output:
 word: "abcd"
-Invalid Token: "*/"
+invalid token: "*/"
 word: "ef"
