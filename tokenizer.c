@@ -523,6 +523,9 @@ void print_token(char* tokenName, char* start, char* end){
     }
     printf("\"\n");
 }
+//Calculate the bucket in the hash table that corresponds to the string
+//It is assumed that string != NULL and len >= 0
+//Returns the bucket for string in the hash table
 int getBucket(char string[], int len) {
 	int sum = 0;
 	for(int i = 0; i < len; i++) {
@@ -530,10 +533,16 @@ int getBucket(char string[], int len) {
     }
 	return sum % 35;
 }
-
+//Insert the string into the hash table
+//It is assumed that hashTable != NULL (guaranteed by main) and string != NULL (guaranteed by makeHash)
+//If there is a memory allocation error, the program exits
 void insertHash(node** hashTable, char string[]) {
 	int bucket = getBucket(string, strlen(string));
 	node* newNode = malloc(sizeof(node));
+    if (newNode == NULL){
+        printf("Memory allocation error!");
+        exit(0);
+    }
 	newNode->data = string;
 	if(hashTable[bucket] == NULL) {
 		newNode->next = NULL;
@@ -544,7 +553,8 @@ void insertHash(node** hashTable, char string[]) {
 		hashTable[bucket] = newNode;
     }
 }
-
+//Fills hash with C keywords
+//It is assumed that hashTable != NULL (guaranteed by main)
 void makeHash(node** hashTable) {
     insertHash(hashTable, "auto");
     insertHash(hashTable, "break");
@@ -578,7 +588,9 @@ void makeHash(node** hashTable) {
     insertHash(hashTable, "goto");
     insertHash(hashTable, "if");
 }
-
+//Searches hash table for string
+//It is assumed that hashTable != NULL (guaranteed by main) and string != NULL (guaranteed by parse_word)
+//Returns 1 if string is a keyword, returns 0 if string is not a keyword
 int searchHash(node** hashTable, char string[], int len) {
 	int bucket = getBucket(string,len);
 	node* ptr = hashTable[bucket];
@@ -589,7 +601,8 @@ int searchHash(node** hashTable, char string[], int len) {
     }
 	return 0;
 }
-
+//Free all nodes in hash table
+//It is assumed that hashTable != NULL (guaranteed by main)
 void freeHash(node** hashTable) {
 	for (int i = 0; i < 35; i++) {
 		node* freePtr = hashTable[i];
