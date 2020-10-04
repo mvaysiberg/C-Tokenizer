@@ -1,0 +1,171 @@
+OPERATORS
+Input: “sizeof”
+Output:
+sizeof: "sizeof"
+
+Input: "+++="
+Output:
+increment: "++"
+plus equals: "+="
+
+Input: ">>==="
+Output:
+shift right equals: ">>="
+equality test: "=="
+
+FLOAT
+Input: “1.34E.6”
+Output:
+float: "1.34"
+word: "E"
+structure member: "."
+decimal integer: "6"
+
+Input: “3.14e++7”
+Output:
+float: "3.14"
+word: "e"
+increment: "++"
+decimal integer: "7"
+
+Input: “3.14ee+7”
+Output:
+float: "3.14"
+word: "ee"
+addition: "+"
+decimal integer: "7"
+
+Input: “3..14”
+Output:
+decimal integer: "3"
+structure member: "."
+structure member: "."
+decimal integer: "14"
+
+Input: “12.345.678”
+Output:
+float: "12.345"
+structure member: "."
+decimal integer: "678"
+
+Input: “56.23e-78e+3”
+Output:
+float: "56.23e-78"
+word: "e"
+addition: "+"
+decimal integer: "3"
+
+Input: “0125.07”
+Output:
+float: "0125.07"
+
+HEX
+Input: “0xFFF.23”
+Output:
+hexadecimal integer: "0xFFF"
+structure member: "."
+decimal integer: "23"
+
+Input: “0xAbG12f”
+Output:
+hexadecimal integer: "0XAb"
+word: "G12f"
+
+DECIMAL
+Input: “123.”
+Output:
+decimal integer: "123"
+structure member: "."
+
+Input: “123E456”
+Output:
+decimal integer: "123"
+word: "E456"
+
+OCTAL
+Input: “0”
+Output:
+octal integer: "0"
+
+Input: “0XZ”
+Output:
+octal integer: "0"
+word: "XZ"
+
+WORD
+Input: "INT"
+Output:
+word: "INT"
+
+Input: “integer”
+Output:
+word: “integer”
+
+Input: "intx"
+Output:
+word: "intx"
+
+ANOMALOUS
+Input: ““
+Output:
+A new line is printed
+
+Input: No input
+Output:
+No arguments
+
+Input: "\$"
+Output:
+Invalid Token: "$"
+
+EXTRA CREDIT
+Input: "abc'abc"
+Output:
+word: "abc"
+Invalid token: 'abc
+
+Input: "abc\”abc"
+Output:
+word: "abc"
+Invalid token: "abc
+
+Input: "ab\"ca\"bc"
+Output:
+word: "ab"
+quote: ""ca""
+word: "bc"
+
+Input: "ab'c a'bc"
+Output:
+word: "ab"
+quote: "'c a'"
+word: "bc"
+
+Input: "asf'd//f’d"
+Output:
+word: "asf"
+quote: "'d//f'"
+word: "d"
+
+Input: “auto”
+Output:
+keyword: "auto"
+
+Input: "abc//def"
+Output:
+word: "abc"
+
+Input: “ab/*c de*/f"
+Output:
+word: "ab"
+word: "f"
+
+Input "ab/*cdef"
+Output: 
+word: "ab"
+
+Input: "abcd*/ef"
+Output:
+word: "abcd"
+Invalid Token: "*/"
+word: "ef"
