@@ -20,7 +20,6 @@ tokenProperties parse_quote(char* tokenString, int x);
 tokenProperties parse_operator(char* tokenString, int x);
 tokenProperties parse_word(char* tokenString, int x, node** hashTable);
 tokenProperties parse_digit(char* tokenString, int x);
-int isKeyword(char* strStart, char*strEnd);
 void print_token(char* tokenName, char* start, char* end);
 int getBucket(char string[], int len);
 void insertHash(node** hashTable, char string[]);
