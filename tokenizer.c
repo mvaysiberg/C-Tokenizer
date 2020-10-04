@@ -98,13 +98,15 @@ int main(int argc, char ** argv){
 }
 //Used to find closing quote
 //It is assumed that tokenString[x] is either " or ' (which is guaranteed from main) and that tokenString either contains a closing quote or null terminator
+//The argument tokenString is used to pass the entire input string and the argument x is the index where the token starts
+//This function returns a struct that describes the end of the token and its name, if the end position == -1, then the quote is not matched
 tokenProperties parse_quote(char* tokenString, int x){
-    char qtype = tokenString[x];
+    char quoteType = tokenString[x];
     x+=1;
     tokenProperties ret;
     while (tokenString[x]!= '\0')
     {
-        if (tokenString[x] == qtype)
+        if (tokenString[x] == quoteType)
         {
             ret.endpos = x+1;
             ret.tokenName = "quote";
@@ -118,6 +120,8 @@ tokenProperties parse_quote(char* tokenString, int x){
 }
 //Determine the operator in the tokenString
 //It is assumed that tokenString[x] exists
+//The argument tokenString is used to pass the entire input string and the argument x is the index where the token starts
+//This function returns a struct that describes the end of the token and its name
 tokenProperties parse_operator(char* tokenString, int x) {
     tokenProperties ret = {x, ""};
     switch(tokenString[x]) {
@@ -393,38 +397,37 @@ tokenProperties parse_operator(char* tokenString, int x) {
 }
 //Determine the word in the tokenString
 //It is assumed that tokenString[x] is a letter (guaranteed by main) and that tokenString either contains a char that is not a letter or a null terminator
+//The argument tokenString is used to pass the entire input string and the argument x is the index where the token starts
+//This function returns a struct that describes the end of the token and its name
 tokenProperties parse_word(char* tokenString, int x){
     int start = x;
     //loops through the tokenString until the current char cannot be part of a word
     while (isalnum(tokenString[x])){
         ++x;
     }
-    int len = x - start;
-    char* token = (char*)(malloc(len + 1));
-    strncpy(token,&(tokenString[start]),len);
-    token[len] = '\0';
     tokenProperties ret = {x, "word"};
     //if the token is sizeof, the token type is sizeof
-    if (compare_str("sizeof",&tokenString[start],&tokenString[x]) == 0){
+    if (strncmp("sizeof",&tokenString[start],x-start == 0)){ 
         ret.tokenName = "sizeof";
     }
     //if the token is a keyword then we return keyword as its type
     else if (isKeyword(&tokenString[start],&tokenString[x])){
         ret.tokenName = "keyword";
     }
-    free(token);
     return ret;
 }
 //Determine the type of number in the tokenString
 //It is assumed that tokenString[x] is a digit (guaranteed by main) and that tokenString either contains a char that is not numeric or a null terminator
+//The argument tokenString is used to pass the entire input string and the argument x is the index where the token starts
+//This function returns a struct that describes the end of the token and its name
 tokenProperties parse_digit(char* tokenString, int x){
     int start = x;
     int possibleFloat = 0;
-    int periodPos = -1;
+    int periodIndex = -1;
     int possibleOctal = 1;
     int possibleHex =1;
     int possibleDecimal = 1;
-    int ePos=-2;
+    int eIndex=-2;
 
     while (1){
         //If the first char is not 0, eliminate hex and octal
@@ -436,14 +439,14 @@ tokenProperties parse_digit(char* tokenString, int x){
             possibleHex = 0;
         }
         //If the char breaks the token, leave the while loop to end token
-        if (!(isdigit(tokenString[x]) || (isalpha(tokenString[x]) && possibleHex) || (possibleFloat && toupper(tokenString[x])=='E') || tokenString[x] == '.' || (x == ePos + 1 && (tokenString[x] == '+' || tokenString[x] == '-')))){
+        if (!(isdigit(tokenString[x]) || (isalpha(tokenString[x]) && possibleHex) || (possibleFloat && toupper(tokenString[x])=='E') || tokenString[x] == '.' || (x == eIndex + 1 && (tokenString[x] == '+' || tokenString[x] == '-')))){
             break;
         }
         if(tokenString[x] == '.'){
             //If it is a possible hex or there was already a period, the token will end
             if (possibleHex || possibleFloat || !isdigit(tokenString[x+1]))
                 break;
-            periodPos = x;
+            periodIndex = x;
             possibleFloat = 1;
         }
         //if any char > 7, eliminate octal
@@ -464,16 +467,16 @@ tokenProperties parse_digit(char* tokenString, int x){
             break;
         }
         //if an 'E' is encountered for the first time
-        else if (possibleFloat && toupper(tokenString[x]) == 'E' && ePos == -2){
-            ePos = x;
+        else if (possibleFloat && toupper(tokenString[x]) == 'E' && eIndex == -2){
+            eIndex = x;
         }
         //If an e occurs more than once
-        else if (ePos != -2 && toupper(tokenString[x]) == 'E'){
+        else if (eIndex != -2 && toupper(tokenString[x]) == 'E'){
             break;
         }
         //If characters after ‘+’ or ‘-’ are not valid
         else if((tokenString[x] == '+' || tokenString[x] == '-') && !isdigit(tokenString[x+1])){
-            x = ePos;
+            x = eIndex;
             break;
         }
         ++x;
@@ -493,6 +496,8 @@ tokenProperties parse_digit(char* tokenString, int x){
 }
 //Returns whether the contents of str are a C keyword
 //It is assumed that str is not NULL
+//the argument strStart represents the start of the token and strEnd represents the one char after end of the token, they are used to compare the token to C keywords
+//This function returns 1 if the token is a keyword and 0 if the token is not a keyword
 int isKeyword(char* strStart, char* strEnd){
      if (compare_str("auto", strStart, strEnd) == 0){
         return 1;
@@ -562,6 +567,7 @@ int isKeyword(char* strStart, char* strEnd){
 }
 //Prints token
 //It is assumed that end > start are not NULL (guaranteed by main) and tokenName is not NULL and \0 terminated
+//The argument tokenName represents the type of token and the arguments start and end represent the start and end + 1 indicies of the token in the input string
 void print_token(char* tokenName, char* start, char* end){
     printf("%s: \"", tokenName);
     //prints each character [start,end)
@@ -571,16 +577,3 @@ void print_token(char* tokenName, char* start, char* end){
     printf("\"\n");
 }
 
-int compare_str(char* str1, char* str2Start, char* str2End){
-    if (str1 == NULL || str2Start == NULL || str2End == NULL)
-        return -1;
-    while(*str1 != '\0' && str2Start != str2End){
-        if (*str1 != *str2Start)
-        {
-            return 1;
-        }
-        ++str1;
-        ++str2Start;
-    }
-    return !(*str1 == '\0' && str2Start == str2End); 
-}
