@@ -10,12 +10,23 @@ typedef struct _tokenProperties {
     char* tokenName;
 } tokenProperties;
 
+//create nodes for hash table
+typedef struct _node{
+   char* data;
+   struct _node* next;
+} node;
+
 tokenProperties parse_quote(char* tokenString, int x);
 tokenProperties parse_operator(char* tokenString, int x);
-tokenProperties parse_word(char* tokenString, int x);
+tokenProperties parse_word(char* tokenString, int x, node** hashTable);
 tokenProperties parse_digit(char* tokenString, int x);
 int isKeyword(char* strStart, char*strEnd);
 void print_token(char* tokenName, char* start, char* end);
+int getBucket(char string[], int len);
+void insertHash(node** hashTable, char string[]);
+void makeHash(node** hashTable);
+int searchHash(node** hashTable, char string[], int len);
+void freeHash(node** hashTable);
 
 //Get command-line input and iterate through the string
 //It is assumed that argc = 1 or argc = 2
@@ -29,6 +40,12 @@ int main(int argc, char ** argv){
     tokenProperties tp;
     int commenting = 0;
     int y = 0;
+    node* hashTable[35];
+    for (int i = 0; i < 35; i++)
+    {
+        hashTable[i] = NULL;
+    }
+    makeHash(hashTable);
     while (argv[1][y] != '\0')
     {
         if(!commenting && isspace(argv[1][y]))
@@ -42,7 +59,7 @@ int main(int argc, char ** argv){
         }
         else if (!commenting && isalpha(argv[1][y]))
         {
-            tp = parse_word(argv[1], y);
+            tp = parse_word(argv[1], y, hashTable);
         }
         else if (!commenting && (argv[1][y] == '\"' || argv[1][y] == '\''))
         {
@@ -93,6 +110,7 @@ int main(int argc, char ** argv){
             y+=1;
         }
     }
+    freeHash(hashTable);
 	return 0;
 }
 //Used to find closing quote
@@ -398,7 +416,7 @@ tokenProperties parse_operator(char* tokenString, int x) {
 //It is assumed that tokenString[x] is a letter (guaranteed by main) and that tokenString either contains a char that is not a letter or a null terminator
 //The argument tokenString is used to pass the entire input string and the argument x is the index where the token starts
 //This function returns a struct that describes the end of the token and its name
-tokenProperties parse_word(char* tokenString, int x){
+tokenProperties parse_word(char* tokenString, int x, node** hashTable){
     int start = x;
     //loops through the tokenString until the current char cannot be part of a word
     while (isalnum(tokenString[x])){
@@ -406,11 +424,11 @@ tokenProperties parse_word(char* tokenString, int x){
     }
     tokenProperties ret = {x, "word"};
     //if the token is sizeof, the token type is sizeof
-    if (strncmp("sizeof",&tokenString[start],x-start == 0)){ 
+    if (strncmp("sizeof",&tokenString[start],x-start) == 0){ 
         ret.tokenName = "sizeof";
     }
     //if the token is a keyword then we return keyword as its type
-    else if (isKeyword(&tokenString[start],&tokenString[x])){
+    else if (searchHash(hashTable, &tokenString[start], x-start)){
         ret.tokenName = "keyword";
     }
     return ret;
@@ -493,77 +511,7 @@ tokenProperties parse_digit(char* tokenString, int x){
     }
     return ret;
 }
-//Returns whether the contents of str are a C keyword
-//It is assumed that str is not NULL
-//the argument strStart represents the start of the token and strEnd represents the one char after end of the token, they are used to compare the token to C keywords
-//This function returns 1 if the token is a keyword and 0 if the token is not a keyword
-int isKeyword(char* strStart, char* strEnd){
-     if (compare_str("auto", strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("break",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("case",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("char",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("const",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("continue",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("default",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("do",strStart, strEnd) == 0){
-       return 1;
-    }else if(compare_str("int",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("long",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("register",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("return",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("short",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("signed",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("static",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("struct",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("switch",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("typedef",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("union",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("unsigned",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("void",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("volatile",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("while",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("double",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("else",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("enum",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("extern",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("float",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("for",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("goto",strStart, strEnd) == 0){
-        return 1;
-    }else if(compare_str("if",strStart, strEnd) == 0){
-        return 1;
-    }else{
-        return 0;
-    }
-}
+
 //Prints token
 //It is assumed that end > start are not NULL (guaranteed by main) and tokenName is not NULL and \0 terminated
 //The argument tokenName represents the type of token and the arguments start and end represent the start and end + 1 indicies of the token in the input string
@@ -575,4 +523,80 @@ void print_token(char* tokenName, char* start, char* end){
     }
     printf("\"\n");
 }
+int getBucket(char string[], int len) {
+	int sum = 0;
+	for(int i = 0; i < len; i++) {
+		sum += string[i];
+    }
+	return sum % 35;
+}
 
+void insertHash(node** hashTable, char string[]) {
+	int bucket = getBucket(string, strlen(string));
+	node* newNode = malloc(sizeof(node));
+	newNode->data = string;
+	if(hashTable[bucket] == NULL) {
+		newNode->next = NULL;
+		hashTable[bucket] = newNode;
+    }
+	else {
+		newNode->next = hashTable[bucket];
+		hashTable[bucket] = newNode;
+    }
+}
+
+void makeHash(node** hashTable) {
+    insertHash(hashTable, "auto");
+    insertHash(hashTable, "break");
+    insertHash(hashTable, "case");
+    insertHash(hashTable, "char");
+    insertHash(hashTable, "const");
+    insertHash(hashTable, "continue");
+    insertHash(hashTable, "default");
+    insertHash(hashTable, "do");
+    insertHash(hashTable, "int");
+    insertHash(hashTable, "long");
+    insertHash(hashTable, "register");
+    insertHash(hashTable, "return");
+    insertHash(hashTable, "short");
+    insertHash(hashTable, "signed");
+    insertHash(hashTable, "static");
+    insertHash(hashTable, "struct");
+    insertHash(hashTable, "switch");
+    insertHash(hashTable, "typedef");
+    insertHash(hashTable, "union");
+    insertHash(hashTable, "unsigned");
+    insertHash(hashTable, "void");
+    insertHash(hashTable, "volatile");
+    insertHash(hashTable, "while");
+    insertHash(hashTable, "double");
+    insertHash(hashTable, "else");
+    insertHash(hashTable, "enum");
+    insertHash(hashTable, "extern");
+    insertHash(hashTable, "float");
+    insertHash(hashTable, "for");
+    insertHash(hashTable, "goto");
+    insertHash(hashTable, "if");
+}
+
+int searchHash(node** hashTable, char string[], int len) {
+	int bucket = getBucket(string,len);
+	node* ptr = hashTable[bucket];
+	while (ptr != NULL) {
+		if (strncmp(ptr->data, string, len) == 0)
+			return 1;
+		ptr = ptr->next;
+    }
+	return 0;
+}
+
+void freeHash(node** hashTable) {
+	for (int i = 0; i < 35; i++) {
+		node* freePtr = hashTable[i];
+		while(freePtr != NULL) {
+			node* temp = freePtr->next;
+			free(freePtr);
+			freePtr = temp;
+        }
+	}
+}
