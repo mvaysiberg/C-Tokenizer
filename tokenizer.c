@@ -16,6 +16,7 @@ tokenProperties parse_word(char* tokenString, int x);
 tokenProperties parse_digit(char* tokenString, int x);
 int isKeyword(char* str);
 void print_token(char* tokenName, char* start, char* end);
+int compare_str(char* str1, char* str2Start, char* str2End);
 
 //Get command-line input and iterate through the string
 //It is assumed that argc = 1 or argc = 2
@@ -404,7 +405,7 @@ tokenProperties parse_word(char* tokenString, int x){
     token[len] = '\0';
     tokenProperties ret = {x, "word"};
     //if the token is sizeof, the token type is sizeof
-    if (strcmp(token,"sizeof") == 0){
+    if (compare_str("sizeof",start,x) == 0){
         ret.tokenName = "sizeof";
     }
     //if the token is a keyword then we return keyword as its type
@@ -568,4 +569,18 @@ void print_token(char* tokenName, char* start, char* end){
         printf("%c", *ptr);
     }
     printf("\"\n");
+}
+
+int compare_str(char* str1, char* str2Start, char* str2End){
+    if (str1 == NULL || str2Start == NULL || str2End == NULL)
+        return -1;
+    while(*str1 != '\0' && str2Start != str2End){
+        if (*str1 != *str2Start)
+        {
+            return 1;
+        }
+        ++str1;
+        ++str2Start;
+    }
+    return 0;
 }
